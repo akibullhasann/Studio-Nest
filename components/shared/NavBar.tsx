@@ -45,8 +45,8 @@ const NavBar = () => {
     pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-3 sm:px-4 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-white">
+      <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between gap-2 px-3 sm:px-4 lg:px-8">
         {/* Logo + brand */}
         <Link href="/" className="flex shrink-0 items-center gap-2 sm:gap-2.5">
           <Image
