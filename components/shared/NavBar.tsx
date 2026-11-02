@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client"
 import { cn } from "cn";
 import {
   MoonIcon,
@@ -12,9 +13,7 @@ import {
 
   LogOutIcon,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
   SheetClose,
@@ -26,6 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Profile from "../Profile";
+
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -43,6 +43,13 @@ const NavBar = () => {
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/" && pathname.startsWith(href));
+
+  // In here, user session
+
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  console.log('from user',user);
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-white">
@@ -76,7 +83,7 @@ const NavBar = () => {
               className={cn(
                 "rounded-xl px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground",
                 isActive(link.href) &&
-                  "bg-amber-400/10 font-semibold text-amber-600 dark:text-amber-400"
+                "bg-amber-400/10 font-semibold text-amber-600 dark:text-amber-400"
               )}
             >
               {link.label}
@@ -99,7 +106,7 @@ const NavBar = () => {
             {isDark ? <MoonIcon /> : <SunIcon />}
           </Button>
 
-          
+
 
           {/* Hamburger menu drawer (mobile/tablet) */}
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -141,7 +148,7 @@ const NavBar = () => {
                     className={cn(
                       "rounded-xl px-4 py-2.5 text-left text-sm font-medium text-foreground/80 transition-colors hover:bg-muted hover:text-foreground",
                       isActive(link.href) &&
-                        "bg-amber-400/10 font-semibold text-amber-600 hover:bg-amber-400/10 dark:text-amber-400"
+                      "bg-amber-400/10 font-semibold text-amber-600 hover:bg-amber-400/10 dark:text-amber-400"
                     )}
                   >
                     {link.label}
@@ -150,7 +157,7 @@ const NavBar = () => {
               </nav>
 
               {/* Mobile user items */}
-             
+
 
               <SheetFooter>
                 <Button
@@ -165,9 +172,35 @@ const NavBar = () => {
             </SheetContent>
           </Sheet>
 
-          <Profile></Profile>
+          
+          {/* _________________________________________________________________________________ */}
+
+
+           
+{user ? (
+  <Profile />
+) : (
+  <div className="flex items-center gap-2">
+    <Link
+      href="/login"
+      className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 transition-all hover:border-amber-400 hover:bg-amber-50 hover:text-amber-600"
+    >
+      Login
+    </Link>
+
+    <Link
+      href="/signup"
+      className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-amber-600 hover:shadow-md active:scale-95"
+    >
+      Sign Up
+    </Link>
+  </div>
+)}
+
+          
+
         </div>
-        
+
       </div>
     </header>
   );

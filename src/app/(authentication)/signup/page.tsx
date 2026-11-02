@@ -121,11 +121,11 @@ export default function SignupPage() {
                                         />
                                     </Field>
                                     <Field>
-                                        <FieldLabel htmlFor="photoUrl">Photo URL</FieldLabel>
+                                        <FieldLabel htmlFor="image">Photo URL</FieldLabel>
                                         <Input
-                                            id="photoUrl"
+                                            id="image"
                                             type="url"
-                                            name="photoUrl"
+                                            name="image"
                                             placeholder="https://example.com/avatar.jpg"
                                         />
                                     </Field>
