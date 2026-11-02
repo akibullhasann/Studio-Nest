@@ -16,6 +16,7 @@ import {
     TagIcon,
     UserIcon,
     UsersIcon,
+    XIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -79,11 +80,14 @@ type StudioForm = {
     capacity: string;
     hourlyRate: string;
     deposit: string;
+    rating: string;
     address: string;
-    imageUrl: string;
+    imageUrl: string[];
     amenities: Set<string>;
     overview: string;
 };
+
+const MAX_IMAGES = 3;
 
 const initialForm: StudioForm = {
     title: "",
@@ -91,13 +95,14 @@ const initialForm: StudioForm = {
     capacity: "",
     hourlyRate: "",
     deposit: "",
+    rating: "",
     address: "",
-    imageUrl: "",
+    imageUrl: [""],
     amenities: new Set<string>(),
     overview: "",
 };
 
-type FormErrors = Partial<Record<"title" | "category" | "capacity" | "hourlyRate" | "address" | "overview", string>>;
+type FormErrors = Partial<Record<"title" | "category" | "capacity" | "hourlyRate" | "rating" | "address" | "overview", string>>;
 
 const inputClass =
     "h-11 rounded-xl border-border/80 bg-muted/40 px-3.5 text-sm before:pointer-events-none";
@@ -108,7 +113,7 @@ const AddStudio = () => {
     const [submitted, setSubmitted] = useState(false);
 
     const setField = (
-        key: keyof Omit<StudioForm, "amenities">,
+        key: keyof Omit<StudioForm, "amenities" | "images">,
         value: string
     ) => setForm((prev) => ({ ...prev, [key]: value }));
 
@@ -121,6 +126,26 @@ const AddStudio = () => {
         });
     };
 
+    const setImage = (index: number, value: string) =>
+        setForm((prev) => {
+            const images = [...prev.imageUrl];
+            images[index] = value;
+            return { ...prev, imageUrl: images };
+        });
+
+    const addImage = () =>
+        setForm((prev) =>
+            prev.imageUrl.length >= MAX_IMAGES
+                ? prev
+                : { ...prev, imageUrl: [...prev.imageUrl, ""] }
+        );
+
+    const removeImage = (index: number) =>
+        setForm((prev) => ({
+            ...prev,
+            imageUrl: prev.imageUrl.filter((_, i) => i !== index),
+        }));
+
     const validate = (): FormErrors => {
         const next: FormErrors = {};
         if (!form.title.trim()) next.title = "Give your space a title so renters can find it.";
@@ -129,12 +154,16 @@ const AddStudio = () => {
             next.capacity = "Capacity must be at least 1 creator.";
         if (!form.hourlyRate || Number(form.hourlyRate) <= 0)
             next.hourlyRate = "Set an hourly rate above $0.";
+        if (form.rating !== "" && (Number(form.rating) < 0 || Number(form.rating) > 5))
+            next.rating = "Rating must be between 0 and 5.";
         if (!form.address.trim()) next.address = "A full address is required for bookings.";
         if (!form.overview.trim()) next.overview = "Describe your equipment and vibe — at least 30 characters.";
         else if (form.overview.trim().length < 30)
             next.overview = "Overview looks too short. Add a bit more detail (30+ characters).";
         return next;
     };
+
+    // Handle form submission to send data to the backend server
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -147,14 +176,16 @@ const AddStudio = () => {
 
         const payload = {
             ...form,
+            images: form.imageUrl.map((u) => u.trim()).filter(Boolean),
             capacity: Number(form.capacity),
             hourlyRate: Number(form.hourlyRate),
+            rating: Number(form.rating || 0),
             deposit: Number(form.deposit || 0),
             amenities: Array.from(form.amenities),
             host: HOST_USER,
         };
         console.log("Publishing studio listing:", payload);
-        
+
         const res = await fetch("http://localhost:5000/add-studio", {
             method: "POST",
             headers: {
@@ -380,6 +411,32 @@ const AddStudio = () => {
                                         </FieldDescription>
                                     </Field>
                                 </div>
+
+                                <Field data-invalid={!!errors.rating}>
+                                    <FieldLabel htmlFor="studio-rating">
+                                        Rating (0 - 5)
+                                    </FieldLabel>
+                                    <div className="relative">
+                                        <span className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-amber-500">
+                                            ★
+                                        </span>
+                                        <Input
+                                            id="studio-rating"
+                                            type="number"
+                                            min={0}
+                                            max={5}
+                                            step={0.1}
+                                            placeholder="4.5"
+                                            className={cn(inputClass, "pl-9")}
+                                            value={form.rating}
+                                            onChange={(e) => setField("rating", e.target.value)}
+                                        />
+                                    </div>
+                                    <FieldDescription>
+                                        Optional. Leave empty to show New on the listing.
+                                    </FieldDescription>
+                                    {errors.rating && <FieldError>{errors.rating}</FieldError>}
+                                </Field>
                             </FieldSet>
 
                             <FieldSeparator />
@@ -396,23 +453,49 @@ const AddStudio = () => {
                                 </FieldDescription>
 
                                 <Field>
-                                    <FieldLabel htmlFor="studio-image">
-                                        Studio Image URL
-                                    </FieldLabel>
-                                    <div className="relative">
-                                        <ImagePlusIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                                        <Input
-                                            id="studio-image"
-                                            placeholder="https://images.unsplash.com/photo-…"
-                                            className={cn(inputClass, "pl-9")}
-                                            value={form.imageUrl}
-                                            onChange={(e) =>
-                                                setField("imageUrl", e.target.value)
-                                            }
-                                        />
+                                    <FieldLabel>Studio Images (up to {MAX_IMAGES})</FieldLabel>
+                                    <div className="flex flex-col gap-3">
+                                        {form.imageUrl.map((url, i) => (
+                                            <div key={i} className="relative">
+                                                <ImagePlusIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                                                <Input
+                                                    id={`studio-image-${i}`}
+                                                    placeholder={
+                                                        i === 0
+                                                            ? "Cover image URL (main photo)"
+                                                            : `Image ${i + 1} URL`
+                                                    }
+                                                    className={cn(inputClass, "pl-9", form.imageUrl.length > 1 && "pr-10")}
+                                                    value={url}
+                                                    onChange={(e) => setImage(i, e.target.value)}
+                                                />
+                                                {form.imageUrl.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(i)}
+                                                        aria-label={`Remove image ${i + 1}`}
+                                                        className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-destructive"
+                                                    >
+                                                        <XIcon className="size-4" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
                                     </div>
+
+                                    {form.imageUrl.length < MAX_IMAGES && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={addImage}
+                                            className="mt-1 w-fit rounded-xl"
+                                        >
+                                            <PlusIcon className="mr-1.5 size-4" />
+                                            Add another image
+                                        </Button>
+                                    )}
                                     <FieldDescription>
-                                        Direct link from ImgBB, Unsplash, or your CDN.
+                                        Direct link from ImgBB, Unsplash, or your CDN. First image is the cover.
                                     </FieldDescription>
                                 </Field>
 
@@ -550,7 +633,7 @@ const AddStudio = () => {
                                     className="h-12 rounded-xl bg-amber-500 text-base font-bold text-white hover:bg-amber-600"
                                 >
                                     {submitted &&
-                                    Object.keys(errors).length === 0
+                                        Object.keys(errors).length === 0
                                         ? "Listing Published ✓"
                                         : "Publish Studio Listing"}
                                     {submitted &&
@@ -577,21 +660,32 @@ const AddStudio = () => {
                         </p>
                         <div className="relative overflow-hidden rounded-2xl border border-border shadow-sm">
                             {/* Cover */}
-                            {form.imageUrl.trim() ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                    src={form.imageUrl}
-                                    alt="Studio cover preview"
-                                    className="h-36 w-full object-cover sm:h-40 lg:h-44"
-                                />
-                            ) : (
-                                <div className="flex h-36 w-full flex-col items-center justify-center gap-2 bg-muted text-muted-foreground sm:h-40 lg:h-44">
-                                    <ImagePlusIcon className="size-7" />
-                                    <span className="text-xs">
-                                        Cover image preview
-                                    </span>
-                                </div>
-                            )}
+                            {(() => {
+                                const validImages = form.imageUrl.map((u) => u.trim()).filter(Boolean);
+                                const cover = validImages[0];
+
+                                return cover ? (
+                                    <div className="relative">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={cover}
+                                            alt="Studio cover preview"
+                                            className="h-36 w-full object-cover sm:h-40 lg:h-44"
+                                        />
+                                        {validImages.length > 1 && (
+                                            <span className="absolute right-2 bottom-2 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white">
+                                                <ImagePlusIcon className="size-3" />
+                                                +{validImages.length - 1} more
+                                            </span>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="flex h-36 w-full flex-col items-center justify-center gap-2 bg-muted text-muted-foreground sm:h-40 lg:h-44">
+                                        <ImagePlusIcon className="size-7" />
+                                        <span className="text-xs">Cover image preview</span>
+                                    </div>
+                                );
+                            })()}
 
                             <div className="flex flex-col gap-3 p-4">
                                 <Badge
