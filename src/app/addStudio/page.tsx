@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client"
 import { useState } from "react";
 import { cn } from "cn";
 import {
@@ -69,10 +70,7 @@ const AMENITIES = [
     "Electric Kiln & Wheels",
 ] as const;
 
-const HOST_USER = {
-    name: "Alex Rivera",
-    email: "alex.creator@studionest.io",
-};
+
 
 type StudioForm = {
     title: string;
@@ -146,6 +144,14 @@ const AddStudio = () => {
             imageUrl: prev.imageUrl.filter((_, i) => i !== index),
         }));
 
+     const { data: session } = authClient.useSession();
+        const user = session?.user; 
+    
+    const HOST_USER = {
+    name: user?.name,
+    email: user?.email,
+};
+
     const validate = (): FormErrors => {
         const next: FormErrors = {};
         if (!form.title.trim()) next.title = "Give your space a title so renters can find it.";
@@ -167,6 +173,7 @@ const AddStudio = () => {
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
+       
         const nextErrors = validate();
         console.log("Validation Errors:", nextErrors);
         setErrors(nextErrors);
@@ -201,6 +208,8 @@ const AddStudio = () => {
         toast.success("Studio listing published successfully!")
 
     };
+
+
 
     return (
         <section className="mt-8 pb-20">
@@ -598,7 +607,7 @@ const AddStudio = () => {
                                             id="host-name"
                                             readOnly
                                             disabled
-                                            value={HOST_USER.name}
+                                            value={user?.name}
                                             className={cn(inputClass, "bg-muted/70")}
                                         />
                                     </Field>
@@ -614,7 +623,7 @@ const AddStudio = () => {
                                             id="host-email"
                                             readOnly
                                             disabled
-                                            value={HOST_USER.email}
+                                            value={user?.email}
                                             className={cn(inputClass, "bg-muted/70")}
                                         />
                                     </Field>
