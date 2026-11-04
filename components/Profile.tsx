@@ -57,7 +57,7 @@ const Profile = () => {
                                 </Link>
 
                                 <Link
-                                    href="/my-listings"
+                                    href="/my-listing"
                                     className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-700 transition-all hover:bg-amber-50 hover:text-amber-600"
                                 >
                                     <IoBusinessOutline className="size-5" />
