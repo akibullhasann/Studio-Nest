@@ -1,3 +1,18 @@
+
+export type Host = {
+  name: string;
+  email?: string;
+  image?: string;
+};
+
+export type Review = {
+  _id?: string;
+  user: string;
+  rating: number;
+  comment: string;
+  date?: string;
+};
+
 export type Studio = {
     _id: string;
     title: string;
@@ -10,6 +25,6 @@ export type Studio = {
     imageUrl: string[];
     amenities: string[];
     overview: string;
-    host?: Host;        // এই ডেটায় নেই, তাই optional
-    reviews?: Review[]; // এই ডেটায় নেই, তাই optional
+    host?: Host;        // 
+    reviews?: Review[]; // 
 };
