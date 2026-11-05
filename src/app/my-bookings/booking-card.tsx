@@ -92,7 +92,7 @@ function MyBookingsPage({ bookings }: { bookings: Booking[] }) {
         })
         const data = await res.json()
 
-        
+        if(data){
         toast.success("Booking cancelled successfully!");
         router.refresh();
         

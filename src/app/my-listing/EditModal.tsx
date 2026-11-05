@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 export default function EditModal({ studio }: { studio: Studio }) {
   const [open, setOpen] = useState(false);
@@ -39,9 +40,12 @@ export default function EditModal({ studio }: { studio: Studio }) {
     };
 
     setLoading(true);
+    const token = await getTokenFromClient();
     const res = await fetch(apiUrl(`/update-studio/${studio._id}`), {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" ,
+        authorization: `Bearer ${token}`
+      },
       body: JSON.stringify(updated),
     });
     setLoading(false);
