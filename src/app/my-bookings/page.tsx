@@ -47,7 +47,7 @@ const MyBookings = async () => {
             }
             try {
                 const studioRes = await fetch(
-                    `http://localhost:5000/studio/${booking.studioId}`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/studio/${booking.studioId}`,
                     { cache: 'no-store' }
                 );
                 if (!studioRes.ok) return booking;

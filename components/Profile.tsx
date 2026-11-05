@@ -32,7 +32,7 @@ const Profile = () => {
                 <div className='flex items-center gap-2'>
                     <PopoverTrigger render={<Avatar>
                         <AvatarImage referrerPolicy="no-referrer" src={user?.image as string} />
-                        <AvatarFallback className="text-black">{user?.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback className="text-foreground">{user?.name.charAt(0)}</AvatarFallback>
                         <AvatarBadge className="bg-green-600 dark:bg-green-800" />
                     </Avatar>} />
                     <div>{user?.name}</div>
@@ -40,9 +40,9 @@ const Profile = () => {
                 <PopoverContent align="start">
                     <PopoverHeader>
                         <PopoverTitle>
-                            <p className='text-gray-600 text-small'>Signed in as</p>
+                            <p className='text-muted-foreground text-small'>Signed in as</p>
                             <p className="font-semibold text-xl ">{user?.name}</p>
-                            <p className='text-gray-600 text-small'>{user?.email}</p>
+                            <p className='text-muted-foreground text-small'>{user?.email}</p>
                         </PopoverTitle>
 
                         <PopoverDescription>
@@ -58,7 +58,7 @@ const Profile = () => {
 
                                 <Link
                                     href="/my-listing"
-                                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-700 transition-all hover:bg-amber-50 hover:text-amber-600"
+                                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-foreground transition-all hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-500/10 dark:hover:text-amber-400"
                                 >
                                     <IoBusinessOutline className="size-5" />
                                     My Studio Listings
@@ -66,7 +66,7 @@ const Profile = () => {
 
                                 <Link
                                     href="/my-bookings"
-                                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-700 transition-all hover:bg-amber-50 hover:text-amber-600"
+                                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-foreground transition-all hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-500/10 dark:hover:text-amber-400"
                                 >
                                     <IoCalendarOutline className="size-5" />
                                     My Bookings
@@ -74,18 +74,18 @@ const Profile = () => {
 
                                 <Link
                                     href="/wishlist"
-                                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-700 transition-all hover:bg-amber-50 hover:text-amber-600"
+                                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-foreground transition-all hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-500/10 dark:hover:text-amber-400"
                                 >
                                     <IoHeartOutline className="size-5" />
                                     Saved Wishlist
                                 </Link>
 
-                                <div className="my-2 border-t border-gray-200" />
+                                <div className="my-2 border-t border-border" />
 
                                 <button
                                     type="button"
                                     onClick={handleSignOut}
-                                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-red-600 transition-all hover:bg-red-50"
+                                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-red-600 transition-all hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
                                 >
                                     <IoLogOutOutline className="size-5" />
                                     Sign Out

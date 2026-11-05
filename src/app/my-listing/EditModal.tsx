@@ -41,7 +41,7 @@ export default function EditModal({ studio }: { studio: Studio }) {
 
     setLoading(true);
     const token = await getTokenFromClient();
-    const res = await fetch(apiUrl(`/update-studio/${studio._id}`), {
+    const res = await fetch(`${process.env.NEXT_PUBLI_API_URL}/update-studio/${studio._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" ,
         authorization: `Bearer ${token}`

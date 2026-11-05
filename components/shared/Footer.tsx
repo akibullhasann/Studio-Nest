@@ -1,3 +1,4 @@
+'use client";'
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, Sparkles } from "lucide-react";
@@ -26,9 +27,11 @@ const SOCIAL_LINKS = [
 
 const LEGAL_LINKS = ["Privacy Policy", "Terms of Service", "Cookies"];
 
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 const Footer = () => {
   return (
-    <footer className="relative overflow-hidden border-t border-border/60 bg-white text-muted-foreground">
+    <footer className="relative overflow-hidden border-t border-border/60 bg-background text-muted-foreground">
       {/* amber hairline on top */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
 
@@ -69,7 +72,7 @@ const Footer = () => {
 
           {/* newsletter card */}
           <div className="lg:col-span-5">
-            <div className="rounded-2xl border border-border bg-neutral-50/80 p-5 sm:p-6">
+            <div className="rounded-2xl border border-border bg-muted/50 p-5 sm:p-6">
               <div className="flex items-center gap-2">
                 <Sparkles className="size-4 text-amber-500" />
                 <p className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
@@ -88,7 +91,7 @@ const Footer = () => {
                     type="email"
                     placeholder="you@example.com"
                     aria-label="Email address"
-                    className="h-10 w-full rounded-xl border border-border bg-white pr-3 pl-9 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400/25"
+                    className="h-10 w-full rounded-xl border border-border bg-background pr-3 pl-9 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400/25"
                   />
                 </div>
                 <button
@@ -169,14 +172,14 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-white text-foreground/80 transition-all hover:-translate-y-0.5 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600"
+                  className="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-background text-foreground/80 transition-all hover:-translate-y-0.5 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600"
                 >
                   <Icon className="size-4" />
                 </a>
               ))}
             </div>
 
-            <div className="mt-6 rounded-xl border border-border bg-neutral-50/80 px-4 py-3">
+            <div className="mt-6 rounded-xl border border-border bg-muted/50 px-4 py-3">
               <p className="text-xs text-muted-foreground">Need assistance?</p>
               <a
                 href="mailto:support@studionest.io"
@@ -192,7 +195,7 @@ const Footer = () => {
         {/* ---------- Bottom bar ---------- */}
         <div className="flex flex-col items-center justify-between gap-4 border-t border-border/60 py-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Studio Nest. All rights reserved.
+            © {COPYRIGHT_YEAR} Studio Nest. All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">

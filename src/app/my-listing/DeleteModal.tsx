@@ -26,7 +26,7 @@ export default function DeleteModal({ id, name }: { id: string; name: string }) 
     setLoading(true);
 
     const token = getTokenFromClient();
-    const res = await fetch(`http//localhost:5000/delete-studio/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-studio/${id}`, {
       method: "DELETE",
       headers: {
         authorization: `Bearer ${token}`

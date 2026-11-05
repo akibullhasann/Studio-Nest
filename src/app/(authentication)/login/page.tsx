@@ -5,6 +5,7 @@ import Link from "next/link"
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc"
+import { toast } from "react-toastify";
 
 
 import { Button } from "@/components/ui/button"
@@ -47,12 +48,15 @@ export default function SignupPage() {
         const { data, error } = await authClient.signIn.email({
             ...user
         })
-        if (data) {
-            route.push('/')
-        }
-        if (error) {
-            console.log(error)
-        }
+         if (error) {
+        toast.error(error.message || "Invalid email or password");
+        return;
+    }
+
+    if (data) {
+        toast.success("Log in successful");
+        route.push("/");
+    }
 
 
     }

@@ -36,7 +36,7 @@ const HowStudioWorks = () => {
   return (
     <section
       id="how-it-works"
-      className="relative overflow-hidden border-y border-border/60 bg-neutral-50 dark:bg-neutral-950"
+      className="relative scroll-mt-20 overflow-hidden border-y border-border/60 bg-muted/30"
     >
       {/* subtle amber glow */}
       <div

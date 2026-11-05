@@ -95,11 +95,9 @@ function MyBookingsPage({ bookings }: { bookings: Booking[] }) {
         if(data){
         toast.success("Booking cancelled successfully!");
         router.refresh();
-        
-
-        
-
     }
+    };
+
     return (
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
             {/* ---------- Header ---------- */}

@@ -113,7 +113,7 @@ function Reveal({
 
 const AboutUs = () => {
   return (
-    <section className="bg-background py-16 sm:py-20 lg:py-24">
+    <section id="about" className="scroll-mt-20 bg-background py-16 sm:py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* ---------- 1. Hero ---------- */}
         <Reveal className="mx-auto max-w-3xl text-center">

@@ -194,7 +194,7 @@ const AddStudio = () => {
         };
         console.log("Publishing studio listing:", payload);
 
-        const res = await fetch(apiUrl("/add-studio"), {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-studio`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

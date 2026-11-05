@@ -35,7 +35,7 @@ const MyListingPage = async () => {
     }
 
     
-    const res = await fetch("http://localhost:5000/studio-details", { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/studio-details`, { cache: 'no-store' });
 
     if (!res.ok) {
         return (

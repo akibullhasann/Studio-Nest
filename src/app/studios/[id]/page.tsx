@@ -13,7 +13,7 @@ const StudioDetailsPage = async ({
 
     const token = await getTokenFromServer();
 
-    const res = await fetch(`http://localhost:5000/studio/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/studio/${id}`, {
         headers: {
             authorization: `Bearer ${token}`
         }
