@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 export default function DeleteModal({ id, name }: { id: string; name: string }) {
   const [open, setOpen] = useState(false);
@@ -23,8 +24,13 @@ export default function DeleteModal({ id, name }: { id: string; name: string }) 
 
   const handleDelete = async () => {
     setLoading(true);
-    const res = await fetch(apiUrl(`/delete-studio/${id}`), {
+
+    const token = getTokenFromClient();
+    const res = await fetch(`http//localhost:5000/delete-studio/${id}`, {
       method: "DELETE",
+      headers: {
+        authorization: `Bearer ${token}`
+      }
     });
     setLoading(false);
 
