@@ -6,6 +6,7 @@ import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem, SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { categories } from '@/src/lib/category';
+import type { Studio } from '@/src/lib/studio';
 import { } from '@base-ui/react';
 import React from 'react';
 import { FiRotateCcw, FiSearch, FiSliders } from "react-icons/fi";
@@ -21,7 +22,7 @@ const items = [
 ]
 
 
-const StudioExplorar = ({ studios }) => {
+const StudioExplorar = ({ studios }: { studios: Studio[] }) => {
 
     const [search, setSearch] = useState('');
     const [category, setCategory] = useState("All");
@@ -32,7 +33,7 @@ const StudioExplorar = ({ studios }) => {
 
     const [range, setRange] = useState({ min: "", max: "" });
 
-    let result = studios.filter((s) => {
+    let result = studios.filter((s: Studio) => {
         const matchSearch = `${s.title} ${s.address} ${s.category}`.toLowerCase().includes(search.toLowerCase());
 
         const matchCategory = category === "All" || s.category === category;
@@ -46,9 +47,9 @@ const StudioExplorar = ({ studios }) => {
 
     result = [...result];
 
-    if (sort === 'low') result.sort((a, b) => a.hourlyRate - b.hourlyRate);
-    if (sort === "high") result.sort((a, b) => b.hourlyRate - a.hourlyRate);
-    if (sort === "rating") result.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+    if (sort === 'low') result.sort((a: Studio, b: Studio) => a.hourlyRate - b.hourlyRate);
+    if (sort === "high") result.sort((a: Studio, b: Studio) => b.hourlyRate - a.hourlyRate);
+    if (sort === "rating") result.sort((a: Studio, b: Studio) => (b.rating ?? 0) - (a.rating ?? 0));
     if (sort === "newest") result.reverse();
 
     const reset = () => {
@@ -189,7 +190,7 @@ const StudioExplorar = ({ studios }) => {
 
             {result.length > 0 ? (
                 <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {result.map((studio) => (
+                    {result.map((studio: Studio) => (
                         <StudioCard key={studio._id} studio={studio} />
                     ))}
                 </div>

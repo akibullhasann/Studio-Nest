@@ -15,13 +15,35 @@ import {
     Users,
 } from "lucide-react";
 
+import { apiUrl } from "@/src/lib/api"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { toast } from 'react-toastify';
 
+type BookingStatus = "cancelled" | "pending" | "confirmed"
+
+type Booking = {
+    _id?: string
+    status?: string
+    from?: string
+    to?: string
+    date?: string
+    guests?: string | number
+    total?: number
+    totalPrice?: number
+    price?: number
+    studioImage?: string
+    imageUrl?: string | string[]
+    image?: string | string[]
+    studioTitle?: string
+    title?: string
+    studioAddress?: string
+    studioId?: string
+}
+
 // status -> tailwind styling (accent stripe + badge colors)
-const STATUS_STYLES = {
+const STATUS_STYLES: Record<BookingStatus, { stripe: string; badge: string; icon: typeof Ban; label: string }> = {
     cancelled: {
         stripe: "border-l-destructive",
         badge: "bg-destructive/10 text-destructive",
@@ -42,13 +64,13 @@ const STATUS_STYLES = {
     },
 }
 
-function getStatus(status) {
-    const key = String(status ?? "pending").toLowerCase()
+function getStatus(status?: string) {
+    const key = String(status ?? "pending").toLowerCase() as BookingStatus
     return STATUS_STYLES[key] ?? STATUS_STYLES.pending
 }
 
 // "10:00" + "14:00" -> "4 hrs"
-function getDuration(from, to) {
+function getDuration(from?: string, to?: string) {
     if (!from || !to) return null
     const [fh, fm] = from.split(":").map(Number)
     const [th, tm] = to.split(":").map(Number)
@@ -59,13 +81,13 @@ function getDuration(from, to) {
     return m > 0 ? `${h}h ${m}m` : `${h} hrs`
 }
 
-function MyBookingsPage({ bookings }) {
+function MyBookingsPage({ bookings }: { bookings: Booking[] }) {
 
     const router = useRouter();
 
 
     const handleCancelBooking = async (bookingId: string) => {
-        const res = await fetch(`http://localhost:5000/my-bookings/${bookingId}`, {
+        const res = await fetch(apiUrl(`/my-bookings/${bookingId}`), {
             method: "PATCH"
         })
         const data = await res.json()
@@ -92,11 +114,12 @@ function MyBookingsPage({ bookings }) {
                         Track shoot times, host approvals and cancellation status
                     </p>
                 </div>
-                <Button variant="outline" asChild>
-                    <Link href="/studios">
-                        Browse Studios <ArrowRight />
-                    </Link>
-                </Button>
+                <Link
+                    href="/studios"
+                    className={buttonVariants({ variant: "outline" })}
+                >
+                    Browse Studios <ArrowRight />
+                </Link>
             </div>
 
             {/* ---------- List ---------- */}
@@ -111,7 +134,7 @@ function MyBookingsPage({ bookings }) {
                         </CardContent>
                     </Card>
                 ) : (
-                    bookings.map((booking, index) => {
+                    bookings.map((booking: Booking, index: number) => {
                         const status = getStatus(booking.status)
                         const StatusIcon = status.icon
                         const duration = getDuration(booking.from, booking.to)
@@ -202,11 +225,12 @@ function MyBookingsPage({ bookings }) {
                                         )}
                                         <div className="flex gap-2">
                                             {booking.studioId && (
-                                                <Button variant="outline" size="sm" asChild>
-                                                    <Link href={`/studios/${booking.studioId}`}>
-                                                        View Studio
-                                                    </Link>
-                                                </Button>
+                                                <Link
+                                                    href={`/studios/${booking.studioId}`}
+                                                    className={buttonVariants({ variant: "outline", size: "sm" })}
+                                                >
+                                                    View Studio
+                                                </Link>
                                             )}
                                             <Button variant="outline" size="sm">
                                                 <Printer /> Receipt
@@ -214,7 +238,7 @@ function MyBookingsPage({ bookings }) {
                                             {String(booking.status ?? "pending").toLowerCase() !==
                                                 "cancelled" && (
                                                     <Button
-                                                        onClick={() => handleCancelBooking(booking._id)}
+                                                        onClick={() => booking._id && handleCancelBooking(booking._id)}
                                                         variant="destructive"
                                                         size="sm"
                                                         className="bg-destructive/10 text-destructive hover:bg-destructive/20"

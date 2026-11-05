@@ -26,6 +26,7 @@ const MyBookings = async () => {
         );
     }
 
+    // NOTE: single slash before "my-bookings" — the double slash made the backend return HTML and crashed res.json()
     const res = await fetch(`http://localhost:5000/my-bookings/${user.email}`, { cache: 'no-store' });
 
     if (!res.ok) {

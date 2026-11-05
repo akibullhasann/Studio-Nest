@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { apiUrl } from "@/src/lib/api";
 import { Studio } from "@/lib/studio";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,7 +39,7 @@ export default function EditModal({ studio }: { studio: Studio }) {
     };
 
     setLoading(true);
-    const res = await fetch(`http://localhost:5000/studio/${studio._id}`, {
+    const res = await fetch(apiUrl(`/update-studio/${studio._id}`), {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),

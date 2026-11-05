@@ -1,5 +1,6 @@
 "use client";
 
+import { apiUrl } from "@/src/lib/api";
 import { authClient } from "@/lib/auth-client"
 import { useState } from "react";
 import { cn } from "cn";
@@ -193,7 +194,7 @@ const AddStudio = () => {
         };
         console.log("Publishing studio listing:", payload);
 
-        const res = await fetch("http://localhost:5000/add-studio", {
+        const res = await fetch(apiUrl("/add-studio"), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

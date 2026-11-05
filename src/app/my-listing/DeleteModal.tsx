@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { apiUrl } from "@/src/lib/api";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -22,7 +23,7 @@ export default function DeleteModal({ id, name }: { id: string; name: string }) 
 
   const handleDelete = async () => {
     setLoading(true);
-    const res = await fetch(`http://localhost:5000/studio/${id}`, {
+    const res = await fetch(apiUrl(`/delete-studio/${id}`), {
       method: "DELETE",
     });
     setLoading(false);

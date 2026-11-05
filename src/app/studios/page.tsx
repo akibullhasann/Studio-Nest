@@ -1,38 +1,17 @@
-import StudioCard from '@/components/Studios/StudioCard';
+export const instant = false;
+
 import StudioExplorar from '@/components/Studios/StudioExplorar';
-import { Button } from '@/components/ui/button';
-import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Select, SelectItem, SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { categories } from '@/src/lib/category';
-import { } from '@base-ui/react';
-import React from 'react';
-import { FiRotateCcw, FiSearch, FiSliders } from "react-icons/fi";
-
-
-
-const items = [
-    { label: "Sort", value: null },
-    { label: "Low", value: "low" },
-    { label: "High", value: "high" },
-    { label: "Rating", value: "rating" },
-    { label: "Newest", value: "newest" },
-
-]
-
+import { connection } from "next/server";
+import { getStudioCollection } from '@/src/lib/mongo';
 
 const AllStudiosPage = async () => {
 
-    const res = await fetch('http://localhost:5000/studio-details');
-    const studios = await res.json();
-
-    console.log(studios);
-
-
-
+    await connection();
+    const collection = await getStudioCollection();
+    const studios = await collection.find({}).toArray();
 
     return (
-        
+
             <main className="min-h-screen bg-black px-6 py-16 md:px-12 lg:px-20">
                 <div className="mx-auto max-w-7xl">
                     <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-amber-400">
@@ -47,19 +26,12 @@ const AllStudiosPage = async () => {
 
                     {/* sorting start from here for details page */}
 
-                   <StudioExplorar studios={studios}></StudioExplorar>
+                   <StudioExplorar studios={studios as never}></StudioExplorar>
 
                 </div>
 
-
-
-
-
-
-               
-
             </main >
-        
+
     );
 };
 

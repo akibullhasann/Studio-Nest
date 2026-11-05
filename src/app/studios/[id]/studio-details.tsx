@@ -1,4 +1,5 @@
 "use client"
+import { apiUrl } from "@/src/lib/api"
 import {toast} from "react-toastify"
 import {useRouter} from "next/navigation"
 import { useState } from "react"
@@ -93,7 +94,7 @@ export default function StudioDetails({ studio }: { studio: Studio }) {
             email:user?.email,
         }
 
-        const res = await fetch("http://localhost:5000/bookings-list",{
+        const res = await fetch(apiUrl("/bookings-list"),{
             method: 'POST',
             headers: {
                 "Content-Type" : "application/json"
