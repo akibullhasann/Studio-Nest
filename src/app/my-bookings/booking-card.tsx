@@ -15,7 +15,7 @@ import {
     Users,
 } from "lucide-react";
 
-import { apiUrl } from "@/src/lib/api"
+
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -87,7 +87,7 @@ function MyBookingsPage({ bookings }: { bookings: Booking[] }) {
 
 
     const handleCancelBooking = async (bookingId: string) => {
-        const res = await fetch(apiUrl(`/my-bookings/${bookingId}`), {
+        const res = await fetch(`NEXT_PUBLIC_API_URL/my-bookings/${bookingId}`, {
             method: "PATCH"
         })
         const data = await res.json()

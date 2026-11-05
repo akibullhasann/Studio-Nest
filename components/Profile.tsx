@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import {
     Popover,
@@ -16,6 +17,7 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import { authClient } from "@/lib/auth-client"
+import {toast} from "react-toastify";
 
 const Profile = () => {
     const { data: session } = authClient.useSession();
@@ -24,6 +26,7 @@ const Profile = () => {
     
     const handleSignOut = async () => {
         await authClient.signOut()
+        toast.success('Signout Successfully');
     }
 
     return (

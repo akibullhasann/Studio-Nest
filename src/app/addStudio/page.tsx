@@ -1,6 +1,6 @@
 "use client";
 
-import { apiUrl } from "@/src/lib/api";
+
 import { authClient } from "@/lib/auth-client"
 import { useState } from "react";
 import { cn } from "cn";
@@ -46,6 +46,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const CATEGORIES = [
     "Photo Studio",
@@ -110,6 +111,7 @@ const AddStudio = () => {
     const [form, setForm] = useState<StudioForm>(initialForm);
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitted, setSubmitted] = useState(false);
+    const route = useRouter();
 
     const setField = (
         key: keyof Omit<StudioForm, "amenities" | "images">,
@@ -202,11 +204,17 @@ const AddStudio = () => {
             body: JSON.stringify(payload)
         });
 
+
         const data = await res.json();
 
-        console.log(data)
+        if (res.ok) {
+            toast.success("Studio listing published successfully!");
+           route.push("/my-studios");
+          } else {
+            toast.error(data.message || "Studio listing failed!");
+           }
+        
 
-        toast.success("Studio listing published successfully!")
 
     };
 

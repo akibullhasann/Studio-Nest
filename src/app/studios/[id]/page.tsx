@@ -1,4 +1,4 @@
-export const instant = false;
+
 
 import { notFound } from "next/navigation";
 import StudioDetails from "./studio-details";
@@ -12,6 +12,7 @@ const StudioDetailsPage = async ({
     const { id } = await params;
 
     const token = await getTokenFromServer();
+    console.log(token);
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/studio/${id}`, {
         headers: {

@@ -178,7 +178,7 @@ const NavBar = () => {
 
            
 {user ? (
-  <Profile className='hidden'/>
+  <Profile/>
 ) : (
   <div className="flex items-center gap-2">
     <Link

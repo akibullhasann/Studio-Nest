@@ -33,7 +33,6 @@ import {
 } from "@/components/ui/dialog"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 
 // Sample reviews — swap with real data from the backend when available
@@ -94,10 +93,14 @@ export default function StudioDetails({ studio }: { studio: Studio }) {
             email:user?.email,
         }
 
-        const res = await fetch(apiUrl("/bookings-list"),{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings-list`,{
             method: 'POST',
             headers: {
-                "Content-Type" : "application/json"
+                "Content-Type" : "application/json",
+                headers: {
+            authorization: `Bearer ${token}`
+        }
+                
             },
             body: JSON.stringify(bookingStudioData)
         })
